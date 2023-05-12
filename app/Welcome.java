@@ -1,10 +1,14 @@
 package app;
 
+import utils.DataCollector;
+import utils.DateOfDeathAdder;
 import utils.DuplicateSsn;
+import utils.Retrievers.PersonRetriever;
 import utils.editors.PersonEditor;
 
 import java.util.Map;
 
+import gui.AgeStatisticsGUI;
 import menu.Intro;
 
 import java.util.HashMap;
@@ -23,6 +27,8 @@ public class Welcome {
     public static void main(String[] args) {
         Intro.mainMenu();
 
-    }
+        // int age = 40; // Change the age to the desired value
+        // AgeStatisticsGUI.calculateAgeStatistics(age);
 
+    }
 }

@@ -1,0 +1,945 @@
+i have a project that i describe it to you : 
+i have 4 folder : 
+app
+database
+menu
+utils
+
+------------
+inside app i have 4 java files :
+HumanResources.java
+NatureResources.java
+Resoucres.java
+Welcome.java
+
+HumanResources.java consists of : 
+
+package app;
+
+import java.util.Map;
+
+import javax.xml.crypto.Data;
+
+import utils.DataAppender;
+import utils.editors.PersonEditor;
+
+import java.util.HashMap;
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.Map;
+import java.io.PrintWriter;
+
+public class HumanResources extends Resources {
+    private String name;
+    private String lastname;
+    private String ssn;
+    private String age;
+    private String address;
+    private String job;
+    private String sex;
+    private String nation;
+
+    public HumanResources(String name, String lastname, String ssn, String city, String age, String address,
+            String job, String sex, String nation) {
+        super(city);
+        this.ssn = ssn;
+        this.name = name;
+        this.lastname = lastname;
+        this.address = address;
+        this.job = job;
+        this.age = age;
+        this.sex = sex;
+        this.nation = nation;
+
+    }
+
+    public void submit() {
+
+        Map<String, String> dataObject = new HashMap<String, String>();
+        dataObject.put("ssn", this.ssn);
+        dataObject.put("name", this.name);
+        dataObject.put("lastname", this.lastname);
+        dataObject.put("city", Resources.city);
+        dataObject.put("age", this.age);
+        dataObject.put("address", this.address);
+        dataObject.put("job", this.job);
+        dataObject.put("sex", this.sex);
+        dataObject.put("nation", this.nation);
+
+        String filePath = "database/user.txt";
+
+        try {
+            DataAppender files = new DataAppender(dataObject, filePath, "=");
+        } catch (IOException e) {
+            System.err.println("An error occurred while writing the map to a file: " + e.getMessage());
+        }
+
+    }
+
+    public void edit() {
+
+        Map<String, String> dataObject = new HashMap<String, String>();
+        dataObject.put("ssn", this.ssn);
+        dataObject.put("name", this.name);
+        dataObject.put("lastname", this.lastname);
+        dataObject.put("city", Resources.city);
+        dataObject.put("age", this.age);
+        dataObject.put("address", this.address);
+        dataObject.put("job", this.job);
+        dataObject.put("sex", this.sex);
+        dataObject.put("nation", this.nation);
+
+        try {
+            PersonEditor.editPerson(ssn, dataObject);
+            System.out.println("Person data updated successfully.");
+        } catch (IOException e) {
+            System.out.println("Error updating person data: " + e.getMessage());
+        }
+
+    }
+
+}
+
+------------------
+NatureResources.java consists of : 
+
+package app;
+
+import java.util.Map;
+
+import javax.xml.crypto.Data;
+
+import utils.DataAppender;
+import utils.editors.NatureEditor;
+import utils.editors.PersonEditor;
+
+import java.util.HashMap;
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.Map;
+import java.io.PrintWriter;
+
+public class NatureResources extends Resources {
+    private String animal_type;
+    private String plant_type;
+    private String lands;
+    private String country;
+    private String area;
+    private String ssn;
+    private String city;
+
+    public NatureResources(String animal_type, String plant_type, String lands, String country, String area,
+            String ssn,
+            String city) {
+        super(city);
+        this.animal_type = animal_type;
+        this.plant_type = plant_type;
+        this.lands = lands;
+        this.country = country;
+        this.area = area;
+        this.ssn = ssn;
+    }
+
+    public void submit() {
+
+        Map<String, String> dataObject = new HashMap<String, String>();
+        dataObject.put("ssn", this.ssn);
+        dataObject.put("animal_type", this.animal_type);
+        dataObject.put("plant_type", this.plant_type);
+        dataObject.put("city", Resources.city);
+        dataObject.put("land", this.lands);
+        dataObject.put("country", this.country);
+        dataObject.put("area", this.area);
+
+        String filePath = "database/lands.txt";
+
+        try {
+            DataAppender files = new DataAppender(dataObject, filePath, "=");
+        } catch (IOException e) {
+            System.err.println("An error occurred while writing the map to a file: " + e.getMessage());
+        }
+
+    }
+
+    public void edit() {
+
+        Map<String, String> dataObject = new HashMap<String, String>();
+        dataObject.put("ssn", this.ssn);
+        dataObject.put("animal_type", this.animal_type);
+        dataObject.put("plant_type", this.plant_type);
+        dataObject.put("city", Resources.city);
+        dataObject.put("land", this.lands);
+        dataObject.put("country", this.country);
+        dataObject.put("area", this.area);
+
+        String filePath = "database/lands.txt";
+
+        try {
+            NatureEditor.editNature(ssn, dataObject);
+            System.out.println("Person data updated successfully.");
+        } catch (IOException e) {
+            System.out.println("Error updating person data: " + e.getMessage());
+        }
+
+    }
+
+}
+
+====================================
+Resources.java consists of : 
+
+
+package app;
+
+import java.util.Map;
+import java.util.HashMap;
+import java.io.FileWriter;
+import java.io.IOException;
+
+public class Resources {
+    public static String city;
+
+    public Resources(String city) {
+        Resources.city = city;
+    }
+
+    public static void create(Map<String, String> data) {
+
+    }
+
+    public void find() {
+
+    }
+
+    public void edit() {
+
+    }
+}
+
+=====================================
+
+Welcome.java consists of : 
+
+package app;
+
+import utils.DuplicateSsn;
+import utils.editors.PersonEditor;
+
+import java.util.Map;
+
+import menu.Intro;
+
+import java.util.HashMap;
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.Map;
+import java.io.FileReader;
+import java.util.List;
+import java.util.ArrayList;
+import java.io.BufferedReader;
+import java.io.PrintWriter;
+
+public class Welcome {
+
+    public static void main(String[] args) {
+        Intro.mainMenu();
+
+    }
+
+}
+ ===============================
+they are app files 
+
+database file dose'nt consits of anything important 
+only text files
+
+=================================
+
+Menu folder has 3 java files : 
+
+HumanResourcesMenu.java
+Intro.java
+NatureResourcesMenu.java
+
+====================================
+HumanResourcesMenu.java consists of : 
+
+package menu;
+
+import app.HumanResources;
+import utils.DuplicateSsn;
+import utils.*;
+
+import java.util.Scanner;
+
+public class HumanResourceMenu {
+    public static void createHumanResource() {
+        Scanner sc = new Scanner(System.in);
+        // * Clears the command prompt \
+
+        SystemClear.main();
+        System.out.println("====================================================");
+        System.out.println("Please Enter SSN : ");
+        String ssn = sc.nextLine();
+        Boolean checker = DuplicateSsn.checker(ssn);
+        // * SSN Is Validated Here
+        if (checker) {
+            // * Clears the command prompt \
+
+            SystemClear.main();
+            System.out.println("====================================================");
+
+            System.out.println("SSN Already Exists;");
+            System.out.println("1.Try Again");
+            System.out.println("2.Main Menu");
+            int javab = sc.nextInt();
+            if (javab == 1) {
+                createHumanResource();
+            } else {
+                Intro.mainMenu();
+            }
+        }
+        System.out.println("Please Enter Name : ");
+        String name = sc.nextLine();
+        System.out.println("Please Enter Lastname : ");
+        String lastname = sc.nextLine();
+        System.out.println("Please Enter City : ");
+        String city = sc.nextLine();
+        System.out.println("Please Enter Address : ");
+        String Address = sc.nextLine();
+        System.out.println("Please Enter Job : ");
+        String Job = sc.nextLine();
+        System.out.println("Please Enter Age : ");
+        String Age = sc.nextLine();
+        System.out.println("Please Enter Sex : ");
+        String sex = sc.nextLine();
+        System.out.println("Please Enter Nation : ");
+        String nation = sc.nextLine();
+        HumanResources newPerson = new HumanResources(name, lastname, ssn, city, Age, Address, Job, sex, nation);
+        newPerson.submit();
+        System.out.println("Your Data Submitted Succesfully ! ");
+        System.out.println("1.Main Menu");
+        System.out.println("2.Exit");
+        System.out.print("Select : ");
+        int javabe2 = sc.nextInt();
+        if (javabe2 == 1) {
+            Intro.mainMenu();
+        }
+
+        // * a menu should be added for add data again or comeback
+
+        sc.close();
+
+    }
+
+    public static void editHumanResource() {
+        Scanner sc = new Scanner(System.in);
+        // * Clears the command prompt \
+
+        SystemClear.main();
+        System.out.println("====================================================");
+        System.out.println("Please Enter SSN : ");
+        String ssn = sc.nextLine();
+        Boolean checker = DuplicateSsn.checker(ssn);
+        // * SSN Is Validated Here
+        if (checker == false) {
+            // * Clears the command prompt \
+
+            SystemClear.main();
+            System.out.println("====================================================");
+
+            System.out.println("Cannot Find SSN");
+            System.out.println("1.Try Again");
+            System.out.println("2.Main Menu");
+            int javab = sc.nextInt();
+            if (javab == 1) {
+                editHumanResource();
+            } else {
+                Intro.mainMenu();
+            }
+        }
+        System.out.println("Please Edit Name : ");
+        String name = sc.nextLine();
+        System.out.println("Please Edit Lastname : ");
+        String lastname = sc.nextLine();
+        System.out.println("Please Edit City : ");
+        String city = sc.nextLine();
+        System.out.println("Please Edit Address : ");
+        String Address = sc.nextLine();
+        System.out.println("Please Edit Job : ");
+        String Job = sc.nextLine();
+        System.out.println("Please Edit Age : ");
+        String Age = sc.nextLine();
+        System.out.println("Please Edit Sex : ");
+        String sex = sc.nextLine();
+        System.out.println("Please Edit Nation : ");
+        String nation = sc.nextLine();
+        HumanResources newPerson = new HumanResources(name, lastname, ssn, city, Age, Address, Job, sex, nation);
+        newPerson.edit();
+        System.out.println("Your Data Edited Succesfully ! ");
+        System.out.println("1.Main Menu");
+        System.out.println("2.Exit");
+        System.out.print("Select : ");
+        int javabe2 = sc.nextInt();
+        if (javabe2 == 1) {
+            Intro.mainMenu();
+        }
+
+        // * a menu should be added for add data again or comeback
+
+        sc.close();
+
+    }
+}
+
+====================================
+
+Intro.java consists of : 
+package menu;
+
+import app.HumanResources;
+import utils.DuplicateSsn;
+import utils.*;
+
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
+
+import java.util.Scanner;
+
+public class Intro {
+    public static void mainMenu() {
+        Scanner sc = new Scanner(System.in);
+        // * Clears the command prompt \
+
+        SystemClear.main();
+        System.out.println("====================================================");
+        System.out.println("Welcome To The Nature $ Human Resources Program ! ");
+        System.out.println("1.Resources");
+        System.out.println("2.Create Random Resources");
+        System.out.println("3.Search Resources");
+        System.out.print("Select : ");
+        int answer = sc.nextInt();
+        if (answer == 1) {
+            // * Clears the command prompt \
+
+            SystemClear.main();
+            System.out.println("====================================================");
+
+            System.out.println("1.Human Resources");
+            System.out.println("2.Nature Resources");
+            System.out.print("Select : ");
+            int secanswer = sc.nextInt();
+            if (secanswer == 1) {
+                // * Clears the command prompt \
+
+                SystemClear.main();
+                System.out.println("====================================================");
+
+                System.out.println("1.Create New Resource");
+                System.out.println("2.Edit Resources");
+                System.out.println("3.Submit Death");
+                System.out.print("Select : ");
+                int thirdanswer = sc.nextInt();
+                if (thirdanswer == 1) {
+                    HumanResourceMenu.createHumanResource();
+                } else if (thirdanswer == 2) {
+                    HumanResourceMenu.editHumanResource();
+                }
+
+            } else {
+                // * Clears the command prompt \
+
+                SystemClear.main();
+                System.out.println("====================================================");
+
+                System.out.println("1.Create New Resource");
+                System.out.println("2.Edit Resources");
+                System.out.print("Select : ");
+                int thirdanswer = sc.nextInt();
+                if (thirdanswer == 1) {
+                    NatureResourceMenu.createNatureResource();
+                } else {
+                    NatureResourceMenu.editNatureResource();
+                }
+            }
+        }
+        sc.close();
+
+    }
+
+}
+==========================
+
+NatureResourcesMenu.java consist of : 
+
+package menu;
+
+import app.HumanResources;
+import app.NatureResources;
+import utils.DuplicateSsn;
+import utils.*;
+
+import java.util.Scanner;
+
+public class NatureResourceMenu {
+    public static void createNatureResource() {
+        Scanner sc = new Scanner(System.in);
+        // * Clears the command prompt \
+
+        SystemClear.main();
+        System.out.println("====================================================");
+        System.out.println("Please Enter Code : ");
+        String ssn = sc.nextLine();
+        Boolean checker = DuplicateSsn.codeChecker(ssn);
+        // * Code Is Validated Here
+        if (checker) {
+            // * Clears the command prompt \
+
+            SystemClear.main();
+            System.out.println("====================================================");
+
+            System.out.println("Code Already Exists;");
+            System.out.println("1.Try Again");
+            System.out.println("2.Main Menu");
+            int javab = sc.nextInt();
+            if (javab == 1) {
+                createNatureResource();
+            } else {
+                Intro.mainMenu();
+            }
+        }
+        System.out.println("Please Enter animal Type : ");
+        String animal_type = sc.nextLine();
+        System.out.println("Please Enter plant type : ");
+        String plant_type = sc.nextLine();
+        System.out.println("Please Enter City : ");
+        String city = sc.nextLine();
+        System.out.println("Please Enter land name : ");
+        String lands = sc.nextLine();
+        System.out.println("Please Enter Country : ");
+        String country = sc.nextLine();
+        System.out.println("Please Enter Area name : ");
+        String Area = sc.nextLine();
+        NatureResources newNature = new NatureResources(animal_type, plant_type, lands, country, Area, ssn, city);
+        newNature.submit();
+        System.out.println("Your Data Submitted Succesfully ! ");
+
+        System.out.println("1.Main Menu");
+        System.out.println("2.Exit");
+        System.out.print("Select : ");
+        int javabe2 = sc.nextInt();
+        if (javabe2 == 1) {
+            Intro.mainMenu();
+        }
+
+        // * a menu should be added for add data again or comeback
+
+        sc.close();
+
+    }
+
+    public static void editNatureResource() {
+        Scanner sc = new Scanner(System.in);
+        // * Clears the command prompt \
+
+        SystemClear.main();
+        System.out.println("====================================================");
+        System.out.println("Please Enter Code : ");
+        String ssn = sc.nextLine();
+        Boolean checker = DuplicateSsn.codeChecker(ssn);
+        // * Code Is Validated Here
+        if (checker == false) {
+            // * Clears the command prompt \
+
+            SystemClear.main();
+            System.out.println("====================================================");
+
+            System.out.println("Cannot Find Code");
+            System.out.println("1.Try Again");
+            System.out.println("2.Main Menu");
+            int javab = sc.nextInt();
+            if (javab == 1) {
+                editNatureResource();
+            } else {
+                Intro.mainMenu();
+            }
+        }
+        System.out.println("Please Enter animal Type : ");
+        String animal_type = sc.nextLine();
+        System.out.println("Please Enter plant type : ");
+        String plant_type = sc.nextLine();
+        System.out.println("Please Enter City : ");
+        String city = sc.nextLine();
+        System.out.println("Please Enter land name : ");
+        String lands = sc.nextLine();
+        System.out.println("Please Enter Country : ");
+        String country = sc.nextLine();
+        System.out.println("Please Enter Area name : ");
+        String Area = sc.nextLine();
+        NatureResources newNature = new NatureResources(animal_type, plant_type, lands, country, Area, ssn, city);
+        newNature.edit();
+        System.out.println("Your Data Edited Succesfully ! ");
+
+        System.out.println("1.Main Menu");
+        System.out.println("2.Exit");
+        System.out.print("Select : ");
+        int javabe2 = sc.nextInt();
+        if (javabe2 == 1) {
+            Intro.mainMenu();
+        }
+
+        // * a menu should be added for add data again or comeback
+
+        sc.close();
+
+    }
+
+}
+
+========================
+
+then we have utils folder:
+that has 1 file called editors
+and three java files
+
+lets get into editors :
+NatureEditor.java 
+PersonEditor.java
+
+NatureEditor.java consists of : 
+
+package utils.editors;
+
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
+public class NatureEditor {
+
+    public static void editNature(String ssn, Map<String, String> newData) throws IOException {
+        String filePath = "database/lands.txt";
+        List<String> fileLines = readFileLines(filePath);
+
+        List<String> updatedFileLines = new ArrayList<>();
+        StringBuilder currentBlock = new StringBuilder();
+        boolean foundBlock = false;
+
+        for (String line : fileLines) {
+            if (line.startsWith("ssn=" + ssn)) {
+                foundBlock = true;
+            }
+
+            if (line.equals("====================")) {
+                if (foundBlock) {
+                    updateBlockData(currentBlock, newData);
+                    foundBlock = false;
+                }
+                updatedFileLines.add(currentBlock.toString());
+                updatedFileLines.add(line);
+                currentBlock.setLength(0);
+            } else {
+                currentBlock.append(line).append(System.lineSeparator());
+            }
+        }
+
+        writeFileLines(filePath, updatedFileLines);
+    }
+
+    private static void updateBlockData(StringBuilder blockData, Map<String, String> newData) {
+        String[] lines = blockData.toString().split(System.lineSeparator());
+        for (int i = 0; i < lines.length; i++) {
+            String line = lines[i];
+            for (Map.Entry<String, String> entry : newData.entrySet()) {
+                String key = entry.getKey();
+                if (line.startsWith(key + "=")) {
+                    lines[i] = key + "=" + entry.getValue();
+                    break;
+                }
+            }
+        }
+        blockData.setLength(0);
+        for (String line : lines) {
+            blockData.append(line).append(System.lineSeparator());
+        }
+    }
+
+    private static List<String> readFileLines(String filePath) throws IOException {
+        List<String> lines = new ArrayList<>();
+
+        try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                lines.add(line);
+            }
+        }
+
+        return lines;
+    }
+
+    private static void writeFileLines(String filePath, List<String> lines) throws IOException {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(filePath))) {
+            for (String line : lines) {
+                writer.write(line);
+                writer.newLine();
+            }
+        }
+    }
+
+}
+
+and PersonEditor.java consists of : 
+
+package utils.editors;
+
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
+public class PersonEditor {
+
+    public static void editPerson(String ssn, Map<String, String> newData) throws IOException {
+        String filePath = "database/user.txt";
+        List<String> fileLines = readFileLines(filePath);
+
+        List<String> updatedFileLines = new ArrayList<>();
+        StringBuilder currentBlock = new StringBuilder();
+        boolean foundBlock = false;
+
+        for (String line : fileLines) {
+            if (line.startsWith("ssn=" + ssn)) {
+                foundBlock = true;
+            }
+
+            if (line.equals("====================")) {
+                if (foundBlock) {
+                    updateBlockData(currentBlock, newData);
+                    foundBlock = false;
+                }
+                updatedFileLines.add(currentBlock.toString());
+                updatedFileLines.add(line);
+                currentBlock.setLength(0);
+            } else {
+                currentBlock.append(line).append(System.lineSeparator());
+            }
+        }
+
+        writeFileLines(filePath, updatedFileLines);
+    }
+
+    private static void updateBlockData(StringBuilder blockData, Map<String, String> newData) {
+        String[] lines = blockData.toString().split(System.lineSeparator());
+        for (int i = 0; i < lines.length; i++) {
+            String line = lines[i];
+            for (Map.Entry<String, String> entry : newData.entrySet()) {
+                String key = entry.getKey();
+                if (line.startsWith(key + "=")) {
+                    lines[i] = key + "=" + entry.getValue();
+                    break;
+                }
+            }
+        }
+        blockData.setLength(0);
+        for (String line : lines) {
+            blockData.append(line).append(System.lineSeparator());
+        }
+    }
+
+    private static List<String> readFileLines(String filePath) throws IOException {
+        List<String> lines = new ArrayList<>();
+
+        try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                lines.add(line);
+            }
+        }
+
+        return lines;
+    }
+
+    private static void writeFileLines(String filePath, List<String> lines) throws IOException {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(filePath))) {
+            for (String line : lines) {
+                writer.write(line);
+                writer.newLine();
+            }
+        }
+    }
+
+}
+
+lets get back to utils :
+DataAppender.java
+DuplicateSSN.java
+SystemClear.java
+
+DataAppender.java Consist of this code : 
+
+package utils;
+
+import java.util.Map;
+import java.util.HashMap;
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.Map;
+import java.io.FileReader;
+import java.util.List;
+import java.util.ArrayList;
+import java.io.BufferedReader;
+import java.io.PrintWriter;
+
+public class DataAppender {
+    public DataAppender(Map<String, String> map, String filePath, String separator) throws IOException {
+        try (PrintWriter writer = new PrintWriter(new BufferedWriter(new FileWriter(filePath, true)))) {
+            for (Map.Entry<String, String> entry : map.entrySet()) {
+                String key = entry.getKey();
+                String value = entry.getValue();
+                writer.println(key + separator + value);
+            }
+            writer.println(separator + "==================" + separator); // separator between maps
+        }
+    }
+
+}
+
+
+DuplicateSsn consists of this code : 
+
+package utils;
+
+import java.util.Map;
+import java.util.HashMap;
+import java.io.IOException;
+import java.io.FileReader;
+import java.util.List;
+import java.util.ArrayList;
+import java.io.BufferedReader;
+
+public class DuplicateSsn {
+    public static boolean isDuplicateSSN(String filePath, String ssnToCheck) throws IOException {
+        List<Map<String, String>> maps = readMapsFromFile(filePath);
+
+        for (Map<String, String> map : maps) {
+            String ssn = map.get("ssn");
+            if (ssn != null && ssn.equals(ssnToCheck)) {
+                return true; // Found a duplicate SSN
+            }
+        }
+
+        return false; // No duplicate SSN found
+    }
+
+    public static List<Map<String, String>> readMapsFromFile(String filePath) throws IOException {
+        List<Map<String, String>> maps = new ArrayList<>();
+
+        try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
+            String line;
+            Map<String, String> currentMap = new HashMap<>();
+
+            while ((line = reader.readLine()) != null) {
+                line = line.trim(); // Remove leading/trailing whitespace
+
+                if (line.equals("====================")) {
+                    // End of current map entry, add it to the list
+                    maps.add(currentMap);
+                    currentMap = new HashMap<>();
+                } else {
+                    // Split the line into key-value pairs and add them to the current map
+                    String[] parts = line.split("=", 2);
+                    if (parts.length == 2) {
+                        String key = parts[0];
+                        String value = parts[1];
+                        currentMap.put(key, value);
+                    }
+                }
+            }
+
+            // Add the last map to the list if it is not empty
+            if (!currentMap.isEmpty()) {
+                maps.add(currentMap);
+            }
+        }
+
+        return maps;
+    }
+
+    public static Boolean checker(String ssn) {
+        boolean action;
+
+        try {
+            String filePath = "database/user.txt";
+            boolean isDuplicate = isDuplicateSSN(filePath, ssn);
+            if (isDuplicate) {
+                return true;
+            } else {
+                return false;
+            }
+        } catch (IOException e) {
+            System.err.println("An error occurred while reading the maps from the file: " + e.getMessage());
+        }
+        return true;
+
+    }
+
+    public static Boolean codeChecker(String ssn) {
+        boolean action;
+
+        try {
+            String filePath = "database/lands.txt";
+            boolean isDuplicate = isDuplicateSSN(filePath, ssn);
+            if (isDuplicate) {
+                return true;
+            } else {
+                return false;
+            }
+        } catch (IOException e) {
+            System.err.println("An error occurred while reading the maps from the file: " + e.getMessage());
+        }
+        return true;
+
+    }
+}
+
+
+and SystemClear.java consists of this code : 
+
+package utils;
+
+import java.io.IOException;
+
+public class SystemClear {
+    public static void main() {
+        try {
+            if (System.getProperty("os.name").contains("Windows")) {
+                new ProcessBuilder("cmd", "/c", "cls").inheritIO().start().waitFor();
+            } else {
+                System.out.print("\033[H\033[2J");
+                System.out.flush();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+}
+
+
+============================================
+
+i want you to read the above folders and codes
+and after reading them and understaning the relations
+give me uml class diagram of it

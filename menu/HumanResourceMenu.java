@@ -1,9 +1,11 @@
 package menu;
 
 import app.HumanResources;
+import app.Resources;
 import utils.DuplicateSsn;
 import utils.*;
 
+import java.io.IOException;
 import java.util.Scanner;
 
 public class HumanResourceMenu {
@@ -124,4 +126,129 @@ public class HumanResourceMenu {
         sc.close();
 
     }
+
+    public static void findHumanResource() {
+        Scanner sc = new Scanner(System.in);
+        // * Clears the command prompt \
+
+        SystemClear.main();
+        System.out.println("====================================================");
+        System.out.println("Please Enter SSN : ");
+        String ssn = sc.nextLine();
+        Boolean checker = DuplicateSsn.checker(ssn);
+        // * SSN Is Validated Here
+        if (checker == false) {
+            // * Clears the command prompt \
+
+            SystemClear.main();
+            System.out.println("====================================================");
+
+            System.out.println("Cannot Find SSN");
+            System.out.println("1.Try Again");
+            System.out.println("2.Main Menu");
+            int javab = sc.nextInt();
+            if (javab == 1) {
+                findHumanResource();
+            } else {
+                Intro.mainMenu();
+            }
+        }
+        Resources.findHumanResources(ssn);
+        System.out.println("====================================================");
+        System.out.println("Your Data Found Succesfully ! ");
+        System.out.println("1.Main Menu");
+        System.out.println("2.Exit");
+        System.out.print("Select : ");
+        int javabe2 = sc.nextInt();
+        if (javabe2 == 1) {
+            Intro.mainMenu();
+        }
+
+        // * a menu should be added for add data again or comeback
+
+        sc.close();
+
+    }
+
+    public static void submitDeath() {
+
+        Scanner sc = new Scanner(System.in);
+        // * Clears the command prompt \
+
+        SystemClear.main();
+        System.out.println("====================================================");
+        System.out.println("Please Enter SSN : ");
+        String ssn = sc.nextLine();
+        Boolean checker = DuplicateSsn.checker(ssn);
+        // * SSN Is Validated Here
+        if (checker == false) {
+            // * Clears the command prompt \
+
+            SystemClear.main();
+            System.out.println("====================================================");
+
+            System.out.println("Cannot Find SSN");
+            System.out.println("1.Try Again");
+            System.out.println("2.Main Menu");
+            int javab = sc.nextInt();
+            if (javab == 1) {
+                submitDeath();
+            } else {
+                Intro.mainMenu();
+            }
+        }
+        System.out.println("Enter The Date Of Death : eg. 1399/02/25");
+        System.out.print(": ");
+        String dateofDeath = sc.nextLine();
+        Resources.HumanResourceDeathSubmittion(ssn, dateofDeath);
+        System.out.println("====================================================");
+        System.out.println("Death Has Been Added To The Block");
+        System.out.println("1.Main Menu");
+        System.out.println("2.Exit");
+        System.out.print("Select : ");
+        int javabe2 = sc.nextInt();
+        if (javabe2 == 1) {
+            Intro.mainMenu();
+        }
+
+        // * a menu should be added for add data again or comeback
+
+        sc.close();
+
+    }
+
+    public static void randomHuman() {
+        Scanner sc = new Scanner(System.in);
+        SystemClear.main();
+        System.out.println("==================================================================");
+        System.out.println("Enter The Amount Of Random Human Resources You Want To Create : ");
+        System.out.println("Enter Between 0 > 200");
+        System.out.print("Select : ");
+        int count = sc.nextInt();
+        if (count <= 200 & count >= 0) {
+            Resources.RandomHumanResourceCreator(count);
+            SystemClear.main();
+            System.out.println("=============================");
+            System.out.println("You Have Create " + count + " Amount of Data");
+
+        } else {
+            SystemClear.main();
+
+            System.out.println("=================================================");
+            System.out.println("Invalid Value !");
+            System.out.println("1.Try Again");
+            System.out.println("2.Exit");
+            int selector = sc.nextInt();
+            if (selector == 1) {
+                randomHuman();
+            } else {
+                Intro.mainMenu();
+            }
+
+        }
+
+        sc.close();
+
+    }
+
 }

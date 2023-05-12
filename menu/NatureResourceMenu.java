@@ -2,6 +2,7 @@ package menu;
 
 import app.HumanResources;
 import app.NatureResources;
+import app.Resources;
 import utils.DuplicateSsn;
 import utils.*;
 
@@ -106,6 +107,49 @@ public class NatureResourceMenu {
         newNature.edit();
         System.out.println("Your Data Edited Succesfully ! ");
 
+        System.out.println("1.Main Menu");
+        System.out.println("2.Exit");
+        System.out.print("Select : ");
+        int javabe2 = sc.nextInt();
+        if (javabe2 == 1) {
+            Intro.mainMenu();
+        }
+
+        // * a menu should be added for add data again or comeback
+
+        sc.close();
+
+    }
+
+    public static void findNatureResource() {
+        Scanner sc = new Scanner(System.in);
+        // * Clears the command prompt \
+
+        SystemClear.main();
+        System.out.println("====================================================");
+        System.out.println("Please Enter Code : ");
+        String ssn = sc.nextLine();
+        Boolean checker = DuplicateSsn.codeChecker(ssn);
+        // * SSN Is Validated Here
+        if (checker == false) {
+            // * Clears the command prompt \
+
+            SystemClear.main();
+            System.out.println("====================================================");
+
+            System.out.println("Cannot Find Code");
+            System.out.println("1.Try Again");
+            System.out.println("2.Main Menu");
+            int javab = sc.nextInt();
+            if (javab == 1) {
+                findNatureResource();
+            } else {
+                Intro.mainMenu();
+            }
+        }
+        Resources.findNatureResources(ssn);
+        System.out.println("====================================================");
+        System.out.println("Your Data Found Succesfully ! ");
         System.out.println("1.Main Menu");
         System.out.println("2.Exit");
         System.out.print("Select : ");
