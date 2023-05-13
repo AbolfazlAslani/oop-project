@@ -8,8 +8,10 @@ import utils.editors.PersonEditor;
 
 import java.util.Map;
 
-import gui.AgeStatisticsGUI;
 import menu.Intro;
+import statistics.AgeCounter;
+import statistics.DeathCounter;
+import statistics.GenderBlockRetriever;
 
 import java.util.HashMap;
 import java.io.BufferedWriter;
@@ -26,9 +28,6 @@ public class Welcome {
 
     public static void main(String[] args) {
         Intro.mainMenu();
-
-        // int age = 40; // Change the age to the desired value
-        // AgeStatisticsGUI.calculateAgeStatistics(age);
-
     }
+
 }

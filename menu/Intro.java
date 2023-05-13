@@ -77,6 +77,8 @@ public class Intro {
             }
         } else if (answer == 2) {
             HumanResourceMenu.randomHuman();
+        } else {
+            StatisticsDataMenu.statisticsMainMenu();
         }
         sc.close();
 
