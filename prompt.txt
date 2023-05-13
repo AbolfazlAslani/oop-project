@@ -1,19 +1,4 @@
-i have a project that i describe it to you : 
-i have 4 folder : 
-app
-database
-menu
-utils
-
-------------
-inside app i have 4 java files :
-HumanResources.java
-NatureResources.java
-Resoucres.java
-Welcome.java
-
-HumanResources.java consists of : 
-
+User
 package app;
 
 import java.util.Map;
@@ -21,6 +6,8 @@ import java.util.Map;
 import javax.xml.crypto.Data;
 
 import utils.DataAppender;
+import utils.SystemClear;
+import utils.Retrievers.PersonRetriever;
 import utils.editors.PersonEditor;
 
 import java.util.HashMap;
@@ -101,8 +88,6 @@ public class HumanResources extends Resources {
 
 }
 
-------------------
-NatureResources.java consists of : 
 
 package app;
 
@@ -187,14 +172,19 @@ public class NatureResources extends Resources {
 
 }
 
-====================================
-Resources.java consists of : 
-
 
 package app;
 
 import java.util.Map;
+
+import utils.DataCollector;
+import utils.DateOfDeathAdder;
+import utils.SystemClear;
+import utils.Retrievers.NatureRetriever;
+import utils.Retrievers.PersonRetriever;
+
 import java.util.HashMap;
+import java.util.List;
 import java.io.FileWriter;
 import java.io.IOException;
 
@@ -209,27 +199,100 @@ public class Resources {
 
     }
 
-    public void find() {
+    public static void findHumanResources(String ssn) {
+        try {
+            Map<String, String> personData = PersonRetriever.retrievePersonData(ssn);
+            if (!personData.isEmpty()) {
+                // * Clears the command prompt \
+                SystemClear.main();
+                System.out.println("====================================================");
+                System.out.println("Person data found:");
+                for (Map.Entry<String, String> entry : personData.entrySet()) {
+                    System.out.println(entry.getKey() + "=" + entry.getValue());
+                }
+            } else {
+                System.out.println("Person data not found for the given SSN.");
+            }
+        } catch (IOException e) {
+            System.out.println("Error retrieving person data: " + e.getMessage());
+        }
 
     }
 
-    public void edit() {
+    public static void findNatureResources(String ssn) {
+        try {
+            Map<String, String> personData = NatureRetriever.retrievePersonData(ssn);
+            if (!personData.isEmpty()) {
+                // * Clears the command prompt \
+                SystemClear.main();
+                System.out.println("====================================================");
+                System.out.println("Your data found:");
+                for (Map.Entry<String, String> entry : personData.entrySet()) {
+                    System.out.println(entry.getKey() + "=" + entry.getValue());
+                }
+            } else {
+                System.out.println("Person data not found for the given SSN.");
+            }
+        } catch (IOException e) {
+            System.out.println("Error retrieving person data: " + e.getMessage());
+        }
 
+    }
+
+    public static void HumanResourceDeathSubmittion(String ssn, String deathDate) {
+
+        try {
+            DateOfDeathAdder.addDateOfDeath(ssn, deathDate);
+        } catch (IOException e) {
+            System.out.println("Error adding date of death: " + e.getMessage());
+        }
+
+    }
+
+    public static void RandomHumanResourceCreator(int counter) {
+
+        List<String> fileNames = List.of(
+                "address",
+                "age",
+                "city",
+                "job",
+                "lastname",
+                "name",
+                "nation",
+                "sex",
+                "ssn");
+
+        try {
+            for (int i = 0; i < counter; i++) {
+                List<String> randomDataList = DataCollector.collectRandomDataFromFiles(fileNames);
+                HumanResources randomData = new HumanResources(randomDataList.get(5), randomDataList.get(4),
+                        randomDataList.get(8), randomDataList.get(2), randomDataList.get(1), randomDataList.get(0),
+                        randomDataList.get(3), randomDataList.get(7), randomDataList.get(6));
+                randomData.submit();
+
+            }
+
+        } catch (IOException e) {
+            System.out.println("Error collecting random data: " + e.getMessage());
+        }
     }
 }
 
-=====================================
-
-Welcome.java consists of : 
 
 package app;
 
+import utils.DataCollector;
+import utils.DateOfDeathAdder;
 import utils.DuplicateSsn;
+import utils.Retrievers.PersonRetriever;
 import utils.editors.PersonEditor;
 
 import java.util.Map;
 
 import menu.Intro;
+import statistics.AgeCounter;
+import statistics.DeathCounter;
+import statistics.GenderBlockRetriever;
 
 import java.util.HashMap;
 import java.io.BufferedWriter;
@@ -246,33 +309,19 @@ public class Welcome {
 
     public static void main(String[] args) {
         Intro.mainMenu();
-
     }
 
 }
- ===============================
-they are app files 
 
-database file dose'nt consits of anything important 
-only text files
-
-=================================
-
-Menu folder has 3 java files : 
-
-HumanResourcesMenu.java
-Intro.java
-NatureResourcesMenu.java
-
-====================================
-HumanResourcesMenu.java consists of : 
 
 package menu;
 
 import app.HumanResources;
+import app.Resources;
 import utils.DuplicateSsn;
 import utils.*;
 
+import java.io.IOException;
 import java.util.Scanner;
 
 public class HumanResourceMenu {
@@ -393,11 +442,134 @@ public class HumanResourceMenu {
         sc.close();
 
     }
+
+    public static void findHumanResource() {
+        Scanner sc = new Scanner(System.in);
+        // * Clears the command prompt \
+
+        SystemClear.main();
+        System.out.println("====================================================");
+        System.out.println("Please Enter SSN : ");
+        String ssn = sc.nextLine();
+        Boolean checker = DuplicateSsn.checker(ssn);
+        // * SSN Is Validated Here
+        if (checker == false) {
+            // * Clears the command prompt \
+
+            SystemClear.main();
+            System.out.println("====================================================");
+
+            System.out.println("Cannot Find SSN");
+            System.out.println("1.Try Again");
+            System.out.println("2.Main Menu");
+            int javab = sc.nextInt();
+            if (javab == 1) {
+                findHumanResource();
+            } else {
+                Intro.mainMenu();
+            }
+        }
+        Resources.findHumanResources(ssn);
+        System.out.println("====================================================");
+        System.out.println("Your Data Found Succesfully ! ");
+        System.out.println("1.Main Menu");
+        System.out.println("2.Exit");
+        System.out.print("Select : ");
+        int javabe2 = sc.nextInt();
+        if (javabe2 == 1) {
+            Intro.mainMenu();
+        }
+
+        // * a menu should be added for add data again or comeback
+
+        sc.close();
+
+    }
+
+    public static void submitDeath() {
+
+        Scanner sc = new Scanner(System.in);
+        // * Clears the command prompt \
+
+        SystemClear.main();
+        System.out.println("====================================================");
+        System.out.println("Please Enter SSN : ");
+        String ssn = sc.nextLine();
+        Boolean checker = DuplicateSsn.checker(ssn);
+        // * SSN Is Validated Here
+        if (checker == false) {
+            // * Clears the command prompt \
+
+            SystemClear.main();
+            System.out.println("====================================================");
+
+            System.out.println("Cannot Find SSN");
+            System.out.println("1.Try Again");
+            System.out.println("2.Main Menu");
+            int javab = sc.nextInt();
+            if (javab == 1) {
+                submitDeath();
+            } else {
+                Intro.mainMenu();
+            }
+        }
+        System.out.println("Enter The Date Of Death : eg. 1399/02/25");
+        System.out.print(": ");
+        String dateofDeath = sc.nextLine();
+        Resources.HumanResourceDeathSubmittion(ssn, dateofDeath);
+        System.out.println("====================================================");
+        System.out.println("Death Has Been Added To The Block");
+        System.out.println("1.Main Menu");
+        System.out.println("2.Exit");
+        System.out.print("Select : ");
+        int javabe2 = sc.nextInt();
+        if (javabe2 == 1) {
+            Intro.mainMenu();
+        }
+
+        // * a menu should be added for add data again or comeback
+
+        sc.close();
+
+    }
+
+    public static void randomHuman() {
+        Scanner sc = new Scanner(System.in);
+        SystemClear.main();
+        System.out.println("==================================================================");
+        System.out.println("Enter The Amount Of Random Human Resources You Want To Create : ");
+        System.out.println("Enter Between 0 > 200");
+        System.out.print("Select : ");
+        int count = sc.nextInt();
+        if (count <= 200 & count >= 0) {
+            Resources.RandomHumanResourceCreator(count);
+            SystemClear.main();
+            System.out.println("=============================");
+            System.out.println("You Have Create " + count + " Amount of Data");
+
+        } else {
+            SystemClear.main();
+
+            System.out.println("=================================================");
+            System.out.println("Invalid Value !");
+            System.out.println("1.Try Again");
+            System.out.println("2.Exit");
+            int selector = sc.nextInt();
+            if (selector == 1) {
+                randomHuman();
+            } else {
+                Intro.mainMenu();
+            }
+
+        }
+
+        sc.close();
+
+    }
+
 }
 
-====================================
 
-Intro.java consists of : 
 package menu;
 
 import app.HumanResources;
@@ -420,7 +592,7 @@ public class Intro {
         System.out.println("Welcome To The Nature $ Human Resources Program ! ");
         System.out.println("1.Resources");
         System.out.println("2.Create Random Resources");
-        System.out.println("3.Search Resources");
+        System.out.println("3.Statistic Reports");
         System.out.print("Select : ");
         int answer = sc.nextInt();
         if (answer == 1) {
@@ -442,12 +614,17 @@ public class Intro {
                 System.out.println("1.Create New Resource");
                 System.out.println("2.Edit Resources");
                 System.out.println("3.Submit Death");
+                System.out.println("4.Search");
                 System.out.print("Select : ");
                 int thirdanswer = sc.nextInt();
                 if (thirdanswer == 1) {
                     HumanResourceMenu.createHumanResource();
                 } else if (thirdanswer == 2) {
                     HumanResourceMenu.editHumanResource();
+                } else if (thirdanswer == 3) {
+                    HumanResourceMenu.submitDeath();
+                } else {
+                    HumanResourceMenu.findHumanResource();
                 }
 
             } else {
@@ -458,28 +635,35 @@ public class Intro {
 
                 System.out.println("1.Create New Resource");
                 System.out.println("2.Edit Resources");
+                System.out.println("3.Search");
                 System.out.print("Select : ");
                 int thirdanswer = sc.nextInt();
                 if (thirdanswer == 1) {
                     NatureResourceMenu.createNatureResource();
-                } else {
+                } else if (thirdanswer == 2) {
                     NatureResourceMenu.editNatureResource();
+                } else {
+                    NatureResourceMenu.findNatureResource();
                 }
+
             }
+        } else if (answer == 2) {
+            HumanResourceMenu.randomHuman();
+        } else {
+            StatisticsDataMenu.statisticsMainMenu();
         }
         sc.close();
 
     }
 
 }
-==========================
 
-NatureResourcesMenu.java consist of : 
 
 package menu;
 
 import app.HumanResources;
 import app.NatureResources;
+import app.Resources;
 import utils.DuplicateSsn;
 import utils.*;
 
@@ -598,19 +782,309 @@ public class NatureResourceMenu {
 
     }
 
+    public static void findNatureResource() {
+        Scanner sc = new Scanner(System.in);
+        // * Clears the command prompt \
+
+        SystemClear.main();
+        System.out.println("====================================================");
+        System.out.println("Please Enter Code : ");
+        String ssn = sc.nextLine();
+        Boolean checker = DuplicateSsn.codeChecker(ssn);
+        // * SSN Is Validated Here
+        if (checker == false) {
+            // * Clears the command prompt \
+
+            SystemClear.main();
+            System.out.println("====================================================");
+
+            System.out.println("Cannot Find Code");
+            System.out.println("1.Try Again");
+            System.out.println("2.Main Menu");
+            int javab = sc.nextInt();
+            if (javab == 1) {
+                findNatureResource();
+            } else {
+                Intro.mainMenu();
+            }
+        }
+        Resources.findNatureResources(ssn);
+        System.out.println("====================================================");
+        System.out.println("Your Data Found Succesfully ! ");
+        System.out.println("1.Main Menu");
+        System.out.println("2.Exit");
+        System.out.print("Select : ");
+        int javabe2 = sc.nextInt();
+        if (javabe2 == 1) {
+            Intro.mainMenu();
+        }
+
+        // * a menu should be added for add data again or comeback
+
+        sc.close();
+
+    }
+
 }
 
-========================
 
-then we have utils folder:
-that has 1 file called editors
-and three java files
+package menu;
 
-lets get into editors :
-NatureEditor.java 
-PersonEditor.java
+import java.util.List;
+import java.util.Scanner;
 
-NatureEditor.java consists of : 
+import statistics.AgeCounter;
+import statistics.DeathCounter;
+import statistics.GenderBlockRetriever;
+import utils.SystemClear;
+
+public class StatisticsDataMenu {
+
+    public static void statisticsMainMenu() {
+        Scanner sc = new Scanner(System.in);
+        // * Clears the command prompt \
+
+        SystemClear.main();
+        System.out.println("====================================================");
+        System.out.println("1.Person Age Higher And Lower Stats");
+        System.out.println("2.Number Of Dead People");
+        System.out.println("3.Gender Seperation");
+
+        System.out.print("Select : ");
+
+        int number = sc.nextInt();
+        if (number == 1) {
+            higherAndLowerAgeCounter();
+
+        } else if (number == 2) {
+            deathCounter();
+        } else if (number == 3) {
+            genderSeperator();
+        }
+
+        // * a menu should be added for add data again or comeback
+
+        sc.close();
+
+    }
+
+    private static void higherAndLowerAgeCounter() {
+        Scanner sc = new Scanner(System.in);
+        // * Clears the command prompt \
+
+        SystemClear.main();
+        System.out.println("====================================================");
+        System.out.print("Please Enter The Age : ");
+        int age = sc.nextInt();
+        AgeCounter.counter(age);
+        System.out.println("====================================================");
+        System.out.println("Your Data Found Succesfully ! ");
+        System.out.println("1.Main Menu");
+        System.out.println("2.Exit");
+        System.out.print("Select : ");
+        int javabe2 = sc.nextInt();
+        if (javabe2 == 1) {
+            Intro.mainMenu();
+        }
+
+        // * a menu should be added for add data again or comeback
+
+        sc.close();
+
+    }
+
+    private static void deathCounter() {
+        Scanner sc = new Scanner(System.in);
+        // * Clears the command prompt \
+
+        SystemClear.main();
+        System.out.println("====================================================");
+        DeathCounter.main(null);
+
+        System.out.println("====================================================");
+        System.out.println("Your Data Found Succesfully ! ");
+        System.out.println("1.Main Menu");
+        System.out.println("2.Exit");
+        System.out.print("Select : ");
+        int javabe2 = sc.nextInt();
+        if (javabe2 == 1) {
+            Intro.mainMenu();
+        }
+
+        // * a menu should be added for add data again or comeback
+
+        sc.close();
+
+    }
+
+    private static void genderSeperator() {
+        Scanner sc = new Scanner(System.in);
+        // * Clears the command prompt \
+
+        SystemClear.main();
+        System.out.println("====================================================");
+        System.out.println("1.Male");
+        System.out.println("2.Female");
+        System.out.print("Select: ");
+        int input = sc.nextInt();
+        if (input == 1) {
+            List<String> maleBlocks = GenderBlockRetriever.retrieveBlocksByGender("male");
+            System.out.println("Male blocks:\n" + maleBlocks);
+
+            System.out.println("====================================================");
+            System.out.println("Your Data Found Succesfully ! ");
+            System.out.println("1.Main Menu");
+            System.out.println("2.Exit");
+            System.out.print("Select : ");
+            int javabe2 = sc.nextInt();
+            if (javabe2 == 1) {
+                Intro.mainMenu();
+            }
+
+        }
+
+        else {
+            List<String> femaleBlocks = GenderBlockRetriever.retrieveBlocksByGender("female");
+            System.out.println("Female blocks:\n" + femaleBlocks);
+
+            System.out.println("====================================================");
+            System.out.println("Your Data Found Succesfully ! ");
+            System.out.println("1.Main Menu");
+            System.out.println("2.Exit");
+            System.out.print("Select : ");
+            int javabe2 = sc.nextInt();
+            if (javabe2 == 1) {
+                Intro.mainMenu();
+            }
+        }
+        // * a menu should be added for add data again or comeback
+
+        sc.close();
+
+    }
+
+}
+
+
+package statistics;
+
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
+
+public class AgeCounter {
+    public static void counter(int age) {
+
+        int countHigher = 0;
+        int countLower = 0;
+
+        try (BufferedReader reader = new BufferedReader(new FileReader("database/user.txt"))) {
+            String line;
+            boolean isBlock = false;
+
+            while ((line = reader.readLine()) != null) {
+                if (line.equals("====================")) {
+                    isBlock = !isBlock;
+                    continue;
+                }
+
+                if (isBlock) {
+                    if (line.startsWith("age=")) {
+                        int blockAge = Integer.parseInt(line.substring(4));
+                        if (blockAge > age) {
+                            countHigher++;
+                        } else if (blockAge < age) {
+                            countLower++;
+                        }
+                    }
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        System.out.println("Number of blocks with age higher than " + age + ": " + countHigher);
+        System.out.println("Number of blocks with age lower than " + age + ": " + countLower);
+    }
+}
+
+
+package statistics;
+
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
+
+public class DeathCounter {
+
+    public static void main(String[] args) {
+        int count = countBlocksWithDateOfDeath();
+        System.out.println("Number of blocks with date of death: " + count);
+    }
+
+    public static int countBlocksWithDateOfDeath() {
+        int count = 0;
+        try (BufferedReader br = new BufferedReader(new FileReader("database/user.txt"))) {
+            String line;
+            StringBuilder block = new StringBuilder();
+            while ((line = br.readLine()) != null) {
+                if (line.equals("====================")) {
+                    if (block.toString().contains("dateofdeath=")) {
+                        count++;
+                    }
+                    block = new StringBuilder();
+                } else {
+                    block.append(line).append(System.lineSeparator());
+                }
+            }
+            // Check for the last block in case it doesn't have a closing delimiter
+            if (block.toString().contains("dateofdeath=")) {
+                count++;
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return count;
+    }
+}
+
+
+package statistics;
+
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+
+public class GenderBlockRetriever {
+
+    public static List<String> retrieveBlocksByGender(String gender) {
+        List<String> blocks = new ArrayList<>();
+        try (BufferedReader br = new BufferedReader(new FileReader("database/user.txt"))) {
+            String line;
+            StringBuilder block = new StringBuilder();
+            while ((line = br.readLine()) != null) {
+                if (line.equals("====================")) {
+                    if (block.toString().contains("sex=" + gender)) {
+                        blocks.add(block.toString());
+                    }
+                    block = new StringBuilder();
+                } else {
+                    block.append(line).append(System.lineSeparator());
+                }
+            }
+            // Check for the last block in case it doesn't have a closing delimiter
+            if (block.toString().contains("sex=" + gender)) {
+                blocks.add(block.toString());
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return blocks;
+    }
+}
+
 
 package utils.editors;
 
@@ -696,8 +1170,6 @@ public class NatureEditor {
 
 }
 
-and PersonEditor.java consists of : 
-
 package utils.editors;
 
 import java.io.BufferedReader;
@@ -782,12 +1254,142 @@ public class PersonEditor {
 
 }
 
-lets get back to utils :
-DataAppender.java
-DuplicateSSN.java
-SystemClear.java
+package utils.Retrievers;
 
-DataAppender.java Consist of this code : 
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+public class NatureRetriever {
+
+    public static Map<String, String> retrievePersonData(String ssn) throws IOException {
+        String filePath = "database/lands.txt";
+        List<String> fileLines = readFileLines(filePath);
+
+        Map<String, String> personData = new HashMap<>();
+        StringBuilder currentBlock = new StringBuilder();
+        boolean foundBlock = false;
+
+        for (String line : fileLines) {
+            if (line.startsWith("ssn=" + ssn)) {
+                foundBlock = true;
+            }
+
+            if (line.equals("====================")) {
+                if (foundBlock) {
+                    personData = parseBlockData(currentBlock.toString());
+                    break;
+                }
+                currentBlock.setLength(0);
+            } else {
+                currentBlock.append(line).append(System.lineSeparator());
+            }
+        }
+
+        return personData;
+    }
+
+    private static Map<String, String> parseBlockData(String blockData) {
+        Map<String, String> personData = new HashMap<>();
+        String[] lines = blockData.split(System.lineSeparator());
+        for (String line : lines) {
+            String[] parts = line.split("=");
+            if (parts.length == 2) {
+                String key = parts[0].trim();
+                String value = parts[1].trim();
+                personData.put(key, value);
+            }
+        }
+        return personData;
+    }
+
+    private static List<String> readFileLines(String filePath) throws IOException {
+        List<String> lines = new ArrayList<>();
+
+        try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                lines.add(line);
+            }
+        }
+
+        return lines;
+    }
+
+}
+
+package utils.Retrievers;
+
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+public class PersonRetriever {
+
+    public static Map<String, String> retrievePersonData(String ssn) throws IOException {
+        String filePath = "database/user.txt";
+        List<String> fileLines = readFileLines(filePath);
+
+        Map<String, String> personData = new HashMap<>();
+        StringBuilder currentBlock = new StringBuilder();
+        boolean foundBlock = false;
+
+        for (String line : fileLines) {
+            if (line.startsWith("ssn=" + ssn)) {
+                foundBlock = true;
+            }
+
+            if (line.equals("====================")) {
+                if (foundBlock) {
+                    personData = parseBlockData(currentBlock.toString());
+                    break;
+                }
+                currentBlock.setLength(0);
+            } else {
+                currentBlock.append(line).append(System.lineSeparator());
+            }
+        }
+
+        return personData;
+    }
+
+    private static Map<String, String> parseBlockData(String blockData) {
+        Map<String, String> personData = new HashMap<>();
+        String[] lines = blockData.split(System.lineSeparator());
+        for (String line : lines) {
+            String[] parts = line.split("=");
+            if (parts.length == 2) {
+                String key = parts[0].trim();
+                String value = parts[1].trim();
+                personData.put(key, value);
+            }
+        }
+        return personData;
+    }
+
+    private static List<String> readFileLines(String filePath) throws IOException {
+        List<String> lines = new ArrayList<>();
+
+        try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                lines.add(line);
+            }
+        }
+
+        return lines;
+    }
+
+}
+
 
 package utils;
 
@@ -818,7 +1420,146 @@ public class DataAppender {
 }
 
 
-DuplicateSsn consists of this code : 
+package utils;
+
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
+
+public class DataCollector {
+
+    public static String getRandomDataFromFile(String filePath) throws IOException {
+        List<String> lines = readAllLines(filePath);
+
+        if (!lines.isEmpty()) {
+            Random random = new Random();
+            int index = random.nextInt(lines.size());
+            return lines.get(index);
+        }
+
+        return null;
+    }
+
+    public static List<String> collectRandomDataFromFiles(List<String> fileNames) throws IOException {
+        List<String> randomDataList = new ArrayList<>();
+
+        for (String fileName : fileNames) {
+            String filePath = "randomData/person/" + fileName + ".txt"; // Replace with the actual directory path
+            String randomData = getRandomDataFromFile(filePath);
+
+            if (randomData != null) {
+                randomDataList.add(randomData);
+            }
+        }
+
+        return randomDataList;
+    }
+
+    public static void main(String[] args) {
+        List<String> fileNames = List.of(
+                "address",
+                "age",
+                "city",
+                "job",
+                "lastname",
+                "name",
+                "nation",
+                "sex",
+                "ssn");
+
+        try {
+            List<String> randomDataList = collectRandomDataFromFiles(fileNames);
+            System.out.println("Random Data:");
+            for (String randomData : randomDataList) {
+                System.out.println(randomData);
+            }
+        } catch (IOException e) {
+            System.out.println("Error collecting random data: " + e.getMessage());
+        }
+    }
+
+    private static List<String> readAllLines(String filePath) throws IOException {
+        Path path = Paths.get(filePath);
+        return Files.readAllLines(path);
+    }
+}
+
+
+package utils;
+
+import java.io.*;
+import java.util.ArrayList;
+import java.util.List;
+
+public class DateOfDeathAdder {
+
+    public static void addDateOfDeath(String ssn, String dateOfDeath) throws IOException {
+        String filePath = "database/user.txt";
+        List<String> fileLines = readFileLines(filePath);
+        int blockStartIndex = findBlockStartIndex(fileLines, ssn);
+
+        if (blockStartIndex != -1) {
+            String blockSeparator = "====================";
+            int blockEndIndex = findBlockEndIndex(fileLines, blockStartIndex + 1, blockSeparator);
+
+            if (blockEndIndex != -1) {
+                fileLines.add(blockEndIndex, "dateofdeath=" + dateOfDeath);
+                writeFileLines(filePath, fileLines);
+                System.out.println("Date of death added successfully.");
+            } else {
+                System.out.println("Block end not found for the given SSN.");
+            }
+        } else {
+            System.out.println("Block start not found for the given SSN.");
+        }
+    }
+
+    private static int findBlockStartIndex(List<String> lines, String ssn) {
+        for (int i = 0; i < lines.size(); i++) {
+            if (lines.get(i).startsWith("ssn=" + ssn)) {
+                return i;
+            }
+        }
+        return -1;
+    }
+
+    private static int findBlockEndIndex(List<String> lines, int startIndex, String blockSeparator) {
+        for (int i = startIndex; i < lines.size(); i++) {
+            if (lines.get(i).equals(blockSeparator)) {
+                return i;
+            }
+        }
+        return -1;
+    }
+
+    private static List<String> readFileLines(String filePath) throws IOException {
+        List<String> lines = new ArrayList<>();
+
+        try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                lines.add(line);
+            }
+        }
+
+        return lines;
+    }
+
+    private static void writeFileLines(String filePath, List<String> lines) throws IOException {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(filePath))) {
+            for (String line : lines) {
+                writer.write(line);
+                writer.newLine();
+            }
+        }
+    }
+
+}
+
 
 package utils;
 
@@ -916,8 +1657,6 @@ public class DuplicateSsn {
 }
 
 
-and SystemClear.java consists of this code : 
-
 package utils;
 
 import java.io.IOException;
@@ -936,10 +1675,3 @@ public class SystemClear {
         }
     }
 }
-
-
-============================================
-
-i want you to read the above folders and codes
-and after reading them and understaning the relations
-give me uml class diagram of it
