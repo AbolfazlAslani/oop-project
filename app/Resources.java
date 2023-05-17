@@ -20,10 +20,6 @@ public class Resources {
         Resources.city = city;
     }
 
-    public static void create(Map<String, String> data) {
-
-    }
-
     public static void findHumanResources(String ssn) {
         try {
             Map<String, String> personData = PersonRetriever.retrievePersonData(ssn);

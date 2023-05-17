@@ -29,3 +29,27 @@ plant_type=JJ
 ssn=22
 
 ====================
+area=tonekabon
+country=iran
+city=mazandaran
+land=shiroud
+animal_type=vahshi
+plant_type=harz
+ssn=27
+====================
+area=lahijan
+country=iran
+city=guilan
+land=siahkal
+animal_type=ahli
+plant_type=normal
+ssn=31
+====================
+area=parsabad
+country=iran
+city=ardabil
+land=dasthmoghan
+animal_type=normal
+plant_type=dasht
+ssn=35
+====================
